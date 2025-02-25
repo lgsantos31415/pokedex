@@ -6,7 +6,7 @@
     <title>Pokedex</title>
 
     <link rel="stylesheet" href="style.css" />
-    <script src="main.js" defer></script>
+    <script src="main.js" type="module" defer></script>
 
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
 
@@ -26,39 +26,79 @@
     </header>
     <main>
       <img src="./assets/logo.png" alt="Logo Pokemon" />
-      <div id="row">
+      <div class="row" id="row1">
         <input
           type="text"
           name="nameOrId"
           id="nameOrId"
-          placeholder="Pesquise pelo nome ou ID"
+          placeholder="Search by name or ID"
         />
         <button>
           <i class="ph ph-magnifying-glass"></i>
         </button>
       </div>
-      <div id="cards">
-        <div class="card">
-          <div class="row2">
-            <div class="row3">
-              <span>Grass</span>
-              <span>Poison</span>
-            </div>
-            <span>#0001</span>
+      <div id="cards"></div>
+    </main>
+    <div id="modal" class="invisible">
+      <img src="" alt="" />
+      <div class="column" id="column2">
+        <span>carregando...</span>
+        <div class="row" id="row5">
+          <h1>carregando...</h1>
+          <button><i class="ph ph-speaker-high"></i></button>
+          <audio id="audio" controls preload="none">
+            <source
+              src="https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1.ogg"
+              type="audio/mpeg"
+            />
+          </audio>
+        </div>
+        <div class="row" id="row6">
+          <span>...</span>
+        </div>
+
+        <p>carregando...</p>
+
+        <div class="row" id="row7">
+          <div class="row neight">
+            <span>Height</span>
+            <span>...</span>
           </div>
-          <div class="column">
-            <h1>Bulbasaur</h1>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi quae
-              iusto, adipisci nam delectus voluptates, provident laboriosam
-              assumenda doloribus facere tenetur ipsa ducimus voluptatibus! Unde
-              voluptates dignissimos cum accusantium maiores.
-            </p>
-            <button>Know more</button>
+          <div class="row neight">
+            <span>Weight</span>
+            <span>...</span>
           </div>
-          <img src="" alt="" />
+        </div>
+
+        <h1>Stats</h1>
+        <div id="grid1">
+          <div class="stats row">
+            <span>HP</span>
+            <span>...</span>
+          </div>
+          <div class="stats row">
+            <span>ATK</span>
+            <span>...</span>
+          </div>
+          <div class="stats row">
+            <span>DEF</span>
+            <span>...</span>
+          </div>
+          <div class="stats row">
+            <span>SpA</span>
+            <span>...</span>
+          </div>
+          <div class="stats row">
+            <span>SpD</span>
+            <span>...</span>
+          </div>
+          <div class="stats row">
+            <span>SPD</span>
+            <span>...</span>
+          </div>
         </div>
       </div>
-    </main>
+      <button id="close"><i class="ph ph-x"></i></button>
+    </div>
   </body>
 </html>
