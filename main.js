@@ -9,17 +9,18 @@ close.onclick = () => modal.classList.add("invisible");
 window.addEventListener("scroll", () => {
   if (isLoading) return;
 
-  let heightScreen = window.innerHeight;
-  let distanceFromTop = cards.getBoundingClientRect().top;
-  /*
-  if (distanceFromTop <= heightScreen) {
+  const header = document.querySelector("header");
+  const main = document.querySelector("main");
+  const total = header.offsetHeight + main.offsetHeight + 16;
+  const scroll = window.scrollY + window.innerHeight;
+
+  if (scroll + 25 >= total) {
     isLoading = true;
     offset += 6;
     start().finally(() => {
       isLoading = false;
     });
   }
-  */
 });
 
 import {
