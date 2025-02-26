@@ -17,6 +17,7 @@ function getType(type) {
     ice: "#51C4E7",
     ghost: "#7B62A3",
     dragon: "#53A4CF",
+    dark: "#707070",
   };
 
   const cl = {
@@ -37,6 +38,7 @@ function getType(type) {
     ice: "black",
     ghost: "black",
     dragon: "white",
+    dark: "white",
   };
 
   let span = document.createElement("span");
@@ -61,13 +63,10 @@ function getFirstLatterUpperCase(name) {
 }
 
 function getName(name) {
-  if (name.includes("-f")) {
-    return getFirstLatterUpperCase(name.split("-f")[0]);
-  } else if (name.includes("-m")) {
-    return getFirstLatterUpperCase(name.split("-m")[0]);
-  } else {
-    return getFirstLatterUpperCase(name);
-  }
+  name = name.split("-");
+
+  const newName = name.map((item) => getFirstLatterUpperCase(item)).join(" ");
+  return newName;
 }
 
 function searchByNameOrId(list, value) {
@@ -79,24 +78,40 @@ function searchByNameOrId(list, value) {
 }
 
 async function fetchPokemon(url) {
-  const response = await fetch(url);
-  const json = await response.json();
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("");
 
-  const response2 = await fetch(
-    `https://pokeapi.co/api/v2/pokemon-species/${json.id}`
-  );
-  const json2 = await response2.json();
-  const newObject = { ...json, ...json2 };
+    const json = await response.json();
 
-  return newObject;
+    if (!json.is_default) {
+      return null;
+    }
+
+    console.log(json);
+
+    const response2 = await fetch(json.species.url);
+    if (!response2.ok) throw new Error("");
+    const json2 = await response2.json();
+
+    const newObject = { ...json, ...json2 };
+
+    return newObject;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 async function fetchListPokemons() {
-  const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1304`);
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1025`);
+
   return await response.json();
 }
 
 function drawPokemon(cards, json, showModal) {
+  if (!json) return;
+
   let card = document.createElement("div");
   card.classList.add("card");
 
@@ -112,7 +127,7 @@ function drawPokemon(cards, json, showModal) {
   row3.id = "row3";
   row3.classList.add("row");
 
-  const spans = json.types.map((type) => getType(type.type.name));
+  const spans = json?.types.map((type) => getType(type.type.name));
 
   let span = document.createElement("span");
   span.innerText = getId(json.id);
@@ -157,6 +172,23 @@ function drawPokemon(cards, json, showModal) {
   cards.appendChild(card);
 }
 
+function orderBy(list, condition) {
+  switch (condition) {
+    case 0:
+      list.sort((a, b) => a.url.split("/")[6] - b.url.split("/")[6]);
+      break;
+    case 1:
+      list.sort((a, b) => b.url.split("/")[6] - a.url.split("/")[6]);
+      break;
+    case 2:
+      list.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case 3:
+      list.sort((a, b) => b.name.localeCompare(a.name));
+      break;
+  }
+}
+
 export {
   getType,
   getId,
@@ -166,4 +198,5 @@ export {
   fetchListPokemons,
   drawPokemon,
   searchByNameOrId,
+  orderBy,
 };

@@ -20,7 +20,7 @@
   <body>
     <header>
       <img src="./assets/logo.png" alt="Logo Pokemon" />
-      <button>
+      <button id="opensidebar">
         <i class="ph ph-list"></i>
       </button>
     </header>
@@ -100,7 +100,32 @@
           </div>
         </div>
       </div>
-      <button id="close"><i class="ph ph-x"></i></button>
+      <button id="close" class="close"><i class="ph ph-x"></i></button>
+    </div>
+    <div id="wrapper" class="invisible"></div>
+    <div id="sidebar" class="rightanimation">
+      <button id="closesidebar" class="close"><i class="ph ph-x"></i></button>
+      <h1>Ordenar por</h1>
+      <select name="" id="">
+        <option value="">Menor número primeiro</option>
+        <option value="">Maior número primeiro</option>
+        <option value="">A-Z</option>
+        <option value="">Z-A</option>
+      </select>
+      <h1>Filtrar por</h1>
+      <label for="">Região</label>
+      <select name="" id="">
+        <option value="">Todas</option>
+        <option value="">Kanto</option>
+        <option value="">Johto</option>
+        <option value="">Hoenn</option>
+        <option value="">Sinnoh</option>
+        <option value="">Unova</option>
+        <option value="">Kalos</option>
+        <option value="">Alola</option>
+        <option value="">Galar</option>
+        <option value="">Paldea</option>
+      </select>
     </div>
   </body>
 </html>

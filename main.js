@@ -6,10 +6,11 @@ import {
   fetchListPokemons,
   drawPokemon,
   searchByNameOrId,
+  orderBy,
 } from "./functions/functions.js";
 
 let begin = 0;
-let end = 5;
+let end = 9;
 let listOfAllPokemons;
 let cards = document.getElementById("cards");
 
@@ -17,10 +18,19 @@ async function start() {
   let { results } = await fetchListPokemons();
 
   listOfAllPokemons = results;
+  orderBy(listOfAllPokemons, 0);
+  drawAllPokemon(listOfAllPokemons);
+}
 
+async function drawAllPokemon() {
   for (let y = begin; y <= end; y++) {
     const pokemon = await fetchPokemon(listOfAllPokemons[y].url);
-    drawPokemon(cards, pokemon, showModal);
+    console.log(listOfAllPokemons[y]);
+    if (pokemon) {
+      drawPokemon(cards, pokemon, showModal);
+    } else {
+      end++;
+    }
   }
 }
 
@@ -108,7 +118,7 @@ window.addEventListener("scroll", () => {
     isLoading = true;
     begin = Math.min(begin + 6, 1300);
     end = Math.min(end + 6, 1306);
-    start().finally(() => {
+    drawAllPokemon().finally(() => {
       isLoading = false;
     });
   }
@@ -176,4 +186,21 @@ function closeModal() {
   spa.innerText = "...";
   spd.innerText = "...";
   spe.innerText = "...";
+}
+
+const wrapper = document.getElementById("wrapper");
+const siderbarMenu = document.getElementById("sidebar");
+const buttonclosesidebar = document.getElementById("closesidebar");
+buttonclosesidebar.onclick = closeSidebar;
+const buttonopensidebar = document.getElementById("opensidebar");
+buttonopensidebar.onclick = openSidebar;
+
+function openSidebar() {
+  wrapper.classList.remove("invisible");
+  siderbarMenu.classList.remove("rightanimation");
+}
+
+function closeSidebar() {
+  wrapper.classList.add("invisible");
+  siderbarMenu.classList.add("rightanimation");
 }
