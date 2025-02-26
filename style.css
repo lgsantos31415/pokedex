@@ -446,11 +446,15 @@ main {
   > h1 {
     font-size: 22px;
     line-height: 22px;
-    display: block;
+  }
+  > label {
+    margin-top: 3px;
   }
   > select {
     width: 100%;
     height: 42px;
+
+    margin-block: 6px 24px;
 
     border: 1px solid black;
     background: white;

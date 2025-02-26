@@ -7,6 +7,7 @@ import {
   drawPokemon,
   searchByNameOrId,
   orderBy,
+  filterBy,
 } from "./functions/functions.js";
 
 let begin = 0;
@@ -14,18 +15,43 @@ let end = 9;
 let listOfAllPokemons;
 let cards = document.getElementById("cards");
 
+let order = document.getElementById("order");
+let orderValue = 0;
+let filter = document.getElementById("filter");
+let filterValue = 0;
+
+order.addEventListener("change", async (e) => {
+  cards.innerHTML = "";
+  orderValue = e.target.value;
+
+  begin = 0;
+  end = 5;
+  await start();
+});
+
+filter.addEventListener("change", async (e) => {
+  cards.innerHTML = "";
+  filterValue = e.target.value;
+
+  begin = 0;
+  end = 5;
+  await start();
+});
+
 async function start() {
   let { results } = await fetchListPokemons();
-
   listOfAllPokemons = results;
-  orderBy(listOfAllPokemons, 0);
+
+  orderBy(listOfAllPokemons, Number(orderValue));
+  listOfAllPokemons = filterBy(listOfAllPokemons, filterValue);
+
   drawAllPokemon(listOfAllPokemons);
 }
 
 async function drawAllPokemon() {
   for (let y = begin; y <= end; y++) {
     const pokemon = await fetchPokemon(listOfAllPokemons[y].url);
-    console.log(listOfAllPokemons[y]);
+
     if (pokemon) {
       drawPokemon(cards, pokemon, showModal);
     } else {

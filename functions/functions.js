@@ -1,4 +1,4 @@
-function getType(type) {
+export function getType(type) {
   const bg = {
     grass: "#9BCC50",
     poison: "#B97FC9",
@@ -50,26 +50,26 @@ function getType(type) {
   return span;
 }
 
-function getId(id) {
+export function getId(id) {
   id = id.toString();
   return `#${id.padStart(4, "0")}`;
 }
 
-function getFirstLatterUpperCase(name) {
+export function getFirstLatterUpperCase(name) {
   const firstLetter = name[0].toUpperCase();
   const rest = name.slice(1);
 
   return `${firstLetter}${rest}`;
 }
 
-function getName(name) {
+export function getName(name) {
   name = name.split("-");
 
   const newName = name.map((item) => getFirstLatterUpperCase(item)).join(" ");
   return newName;
 }
 
-function searchByNameOrId(list, value) {
+export function searchByNameOrId(list, value) {
   if (Number(value)) {
     return list.filter((item) => item.url.split("/")[6].includes(value));
   } else {
@@ -77,7 +77,7 @@ function searchByNameOrId(list, value) {
   }
 }
 
-async function fetchPokemon(url) {
+export async function fetchPokemon(url) {
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error("");
@@ -87,8 +87,6 @@ async function fetchPokemon(url) {
     if (!json.is_default) {
       return null;
     }
-
-    console.log(json);
 
     const response2 = await fetch(json.species.url);
     if (!response2.ok) throw new Error("");
@@ -103,13 +101,13 @@ async function fetchPokemon(url) {
   }
 }
 
-async function fetchListPokemons() {
+export async function fetchListPokemons() {
   const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1025`);
 
   return await response.json();
 }
 
-function drawPokemon(cards, json, showModal) {
+export function drawPokemon(cards, json, showModal) {
   if (!json) return;
 
   let card = document.createElement("div");
@@ -172,7 +170,7 @@ function drawPokemon(cards, json, showModal) {
   cards.appendChild(card);
 }
 
-function orderBy(list, condition) {
+export function orderBy(list, condition) {
   switch (condition) {
     case 0:
       list.sort((a, b) => a.url.split("/")[6] - b.url.split("/")[6]);
@@ -189,14 +187,27 @@ function orderBy(list, condition) {
   }
 }
 
-export {
-  getType,
-  getId,
-  getFirstLatterUpperCase,
-  getName,
-  fetchPokemon,
-  fetchListPokemons,
-  drawPokemon,
-  searchByNameOrId,
-  orderBy,
-};
+export function filterBy(list, condition) {
+  if (condition === 0) {
+    return list;
+  }
+  if (condition === "i") {
+    return list.slice(0, 151);
+  } else if (condition === "ii") {
+    return list.slice(151, 251);
+  } else if (condition === "iii") {
+    return list.slice(251, 386);
+  } else if (condition === "iv") {
+    return list.slice(386, 493);
+  } else if (condition === "v") {
+    return list.slice(493, 649);
+  } else if (condition === "vi") {
+    return list.slice(649, 721);
+  } else if (condition === "vii") {
+    return list.slice(721, 809);
+  } else if (condition === "viii") {
+    return list.slice(809, 905);
+  } else if (condition === "ix") {
+    return list.slice(905, 1026);
+  }
+}
