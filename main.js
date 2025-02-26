@@ -5,11 +5,13 @@ import {
   fetchPokemon,
   fetchListPokemons,
   drawPokemon,
+  searchByNameOrId,
 } from "./functions/functions.js";
 
 let begin = 0;
-let end = 6;
+let end = 5;
 let listOfAllPokemons;
+let cards = document.getElementById("cards");
 
 async function start() {
   let { results } = await fetchListPokemons();
@@ -18,16 +20,49 @@ async function start() {
 
   for (let y = begin; y <= end; y++) {
     const pokemon = await fetchPokemon(listOfAllPokemons[y].url);
-    drawPokemon(pokemon, showModal);
+    drawPokemon(cards, pokemon, showModal);
   }
 }
 
 start();
 
+const input = document.querySelector("input");
+const search = document.getElementById("search");
+
+let isSearch = false;
+
+input.addEventListener("input", async (e) => {
+  if (e.target.value.length === 0 && isSearch) {
+    cards.innerHTML = "";
+
+    begin = 0;
+    end = 5;
+    await start();
+  }
+});
+
+search.onclick = async () => {
+  if (input.value.length > 0) {
+    const newList = searchByNameOrId(listOfAllPokemons, input.value);
+
+    if (newList.length > 0) {
+      cards.innerHTML = "";
+      isSearch = true;
+
+      for (const item of newList) {
+        const pokemon = await fetchPokemon(item.url);
+        drawPokemon(cards, pokemon, showModal);
+      }
+    }
+  }
+};
+
 let isLoading = false;
 
 let modal = document.getElementById("modal");
 let close = document.getElementById("close");
+
+close.onclick = closeModal;
 
 const img = modal.querySelector("img"); //img
 
@@ -59,9 +94,9 @@ const spa = stats[3].querySelectorAll("span"); //spa
 const spd = stats[4].querySelectorAll("span"); //spd
 const spe = stats[5].querySelectorAll("span"); //spe
 
-close.onclick = closeModal;
-
 window.addEventListener("scroll", () => {
+  if (isSearch) return;
+
   if (isLoading) return;
 
   const header = document.querySelector("header");
@@ -71,8 +106,8 @@ window.addEventListener("scroll", () => {
 
   if (scroll + 25 >= total) {
     isLoading = true;
-    begin += 6;
-    end += 6;
+    begin = Math.min(begin + 6, 1300);
+    end = Math.min(end + 6, 1306);
     start().finally(() => {
       isLoading = false;
     });

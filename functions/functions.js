@@ -1,20 +1,44 @@
-const bg = {
-  grass: "#9BCC50",
-  poison: "#B97FC9",
-  fire: "#FD7D24",
-  water: "#FD7D24",
-  flying: "#3DC7EF",
-};
-
-const cl = {
-  grass: "black",
-  poison: "white",
-  fire: "white",
-  water: "black",
-  flying: "black",
-};
-
 function getType(type) {
+  const bg = {
+    grass: "#9BCC50",
+    poison: "#B97FC9",
+    fire: "#FD7D24",
+    water: "#4592C4",
+    flying: "#3DC7EF",
+    bug: "#729F3F",
+    normal: "#A4ACAF",
+    electric: "#EED535",
+    ground: "#AB9842",
+    fairy: "#FDB9E9",
+    fighting: "#D56723",
+    rock: "#A38C21",
+    psychic: "#F366B9",
+    steel: "#9EB7B8",
+    ice: "#51C4E7",
+    ghost: "#7B62A3",
+    dragon: "#53A4CF",
+  };
+
+  const cl = {
+    grass: "black",
+    poison: "white",
+    fire: "white",
+    water: "white",
+    flying: "black",
+    bug: "white",
+    normal: "black",
+    electric: "black",
+    ground: "white",
+    fairy: "black",
+    fighting: "white",
+    rock: "white",
+    psychic: "white",
+    steel: "black",
+    ice: "black",
+    ghost: "black",
+    dragon: "white",
+  };
+
   let span = document.createElement("span");
 
   span.style.backgroundColor = bg[type];
@@ -46,8 +70,12 @@ function getName(name) {
   }
 }
 
-function searchByNameOrId() {
-  "https://pokeapi.co/api/v2/pokemon?limit=1304";
+function searchByNameOrId(list, value) {
+  if (Number(value)) {
+    return list.filter((item) => item.url.split("/")[6].includes(value));
+  } else {
+    return list.filter((item) => item.name.includes(value));
+  }
 }
 
 async function fetchPokemon(url) {
@@ -68,9 +96,7 @@ async function fetchListPokemons() {
   return await response.json();
 }
 
-function drawPokemon(json, showModal) {
-  let cards = document.getElementById("cards");
-
+function drawPokemon(cards, json, showModal) {
   let card = document.createElement("div");
   card.classList.add("card");
 
@@ -139,4 +165,5 @@ export {
   fetchPokemon,
   fetchListPokemons,
   drawPokemon,
+  searchByNameOrId,
 };
