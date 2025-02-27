@@ -107,14 +107,14 @@ export async function fetchListPokemons() {
   return await response.json();
 }
 
-export function drawPokemon(cards, json, showModal) {
+export function drawPokemon(cards, json, showModal, translate) {
   if (!json) return;
 
   let card = document.createElement("div");
   card.classList.add("card");
 
   let enDescription = json.flavor_text_entries.findLast(
-    (item) => item.language.name === "en"
+    (item) => item.language.name === translate
   );
 
   let row2 = document.createElement("div");
@@ -145,7 +145,14 @@ export function drawPokemon(cards, json, showModal) {
   p.innerText = enDescription.flavor_text;
 
   let button = document.createElement("button");
-  button.innerText = "Know more";
+
+  button.innerText =
+    translate === "en"
+      ? "Know more"
+      : translate === "es"
+      ? "Saber más"
+      : "En savoir plus";
+
   button.onclick = () => showModal(json.id);
 
   let img = document.createElement("img");

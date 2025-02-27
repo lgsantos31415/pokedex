@@ -15,53 +15,6 @@ let end = 9;
 let listOfAllPokemons;
 let cards = document.getElementById("cards");
 
-let order = document.getElementById("order");
-let orderValue = 0;
-let filter = document.getElementById("filter");
-let filterValue = 0;
-
-order.addEventListener("change", async (e) => {
-  cards.innerHTML = "";
-  orderValue = e.target.value;
-
-  begin = 0;
-  end = 5;
-  await start();
-});
-
-filter.addEventListener("change", async (e) => {
-  cards.innerHTML = "";
-  filterValue = e.target.value;
-
-  begin = 0;
-  end = 5;
-  await start();
-});
-
-async function start() {
-  let { results } = await fetchListPokemons();
-  listOfAllPokemons = results;
-
-  orderBy(listOfAllPokemons, Number(orderValue));
-  listOfAllPokemons = filterBy(listOfAllPokemons, filterValue);
-
-  drawAllPokemon(listOfAllPokemons);
-}
-
-async function drawAllPokemon() {
-  for (let y = begin; y <= end; y++) {
-    const pokemon = await fetchPokemon(listOfAllPokemons[y].url);
-
-    if (pokemon) {
-      drawPokemon(cards, pokemon, showModal);
-    } else {
-      end++;
-    }
-  }
-}
-
-start();
-
 const input = document.querySelector("input");
 const search = document.getElementById("search");
 
@@ -92,6 +45,70 @@ search.onclick = async () => {
     }
   }
 };
+
+let order = document.getElementById("order");
+let orderValue = 0;
+let filter = document.getElementById("filter");
+let filterValue = 0;
+let traducao = document.getElementById("traducao");
+let traducaoValue = "en";
+
+order.addEventListener("change", async (e) => {
+  cards.innerHTML = "";
+  orderValue = e.target.value;
+
+  begin = 0;
+  end = 5;
+  await start();
+});
+
+filter.addEventListener("change", async (e) => {
+  cards.innerHTML = "";
+  filterValue = e.target.value;
+
+  begin = 0;
+  end = 5;
+  await start();
+});
+
+traducao.addEventListener("change", async (e) => {
+  cards.innerHTML = "";
+  traducaoValue = e.target.value;
+
+  if (traducaoValue === "es") {
+    input.placeholder = "Buscar por Nombre o ID";
+  } else if (traducaoValue === "fr") {
+    input.placeholder = "Rechercher par Nom ou ID";
+  }
+
+  begin = 0;
+  end = 5;
+  await start();
+});
+
+async function start() {
+  let { results } = await fetchListPokemons();
+  listOfAllPokemons = results;
+
+  orderBy(listOfAllPokemons, Number(orderValue));
+  listOfAllPokemons = filterBy(listOfAllPokemons, filterValue);
+
+  drawAllPokemon(listOfAllPokemons);
+}
+
+async function drawAllPokemon() {
+  for (let y = begin; y <= end; y++) {
+    const pokemon = await fetchPokemon(listOfAllPokemons[y].url);
+
+    if (pokemon) {
+      drawPokemon(cards, pokemon, showModal, traducaoValue);
+    } else {
+      end++;
+    }
+  }
+}
+
+start();
 
 let isLoading = false;
 
@@ -175,7 +192,7 @@ async function showModal(id) {
   }
 
   let enDescription = poke.flavor_text_entries.findLast(
-    (item) => item.language.name === "en"
+    (item) => item.language.name === traducaoValue
   );
 
   p.innerText = enDescription.flavor_text;
