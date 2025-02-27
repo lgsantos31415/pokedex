@@ -30,6 +30,13 @@ input.addEventListener("input", async (e) => {
   }
 });
 
+let order = document.getElementById("order");
+let orderValue = 0;
+let filter = document.getElementById("filter");
+let filterValue = 0;
+let traducao = document.getElementById("traducao");
+let traducaoValue = "en";
+
 search.onclick = async () => {
   if (input.value.length > 0) {
     const newList = searchByNameOrId(listOfAllPokemons, input.value);
@@ -40,18 +47,11 @@ search.onclick = async () => {
 
       for (const item of newList) {
         const pokemon = await fetchPokemon(item.url);
-        drawPokemon(cards, pokemon, showModal);
+        drawPokemon(cards, pokemon, showModal, traducaoValue);
       }
     }
   }
 };
-
-let order = document.getElementById("order");
-let orderValue = 0;
-let filter = document.getElementById("filter");
-let filterValue = 0;
-let traducao = document.getElementById("traducao");
-let traducaoValue = "en";
 
 order.addEventListener("change", async (e) => {
   cards.innerHTML = "";
